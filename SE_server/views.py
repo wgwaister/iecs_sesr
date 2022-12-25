@@ -22,10 +22,10 @@ from .forms import *
 from .models import *
 from .resources import *
 from tablib import Dataset
-import plotly.express as px
-import plotly.graph_objs as go
-import plotly.offline as po
-import pandas as pd
+# import plotly.express as px
+# import plotly.graph_objs as go
+# import plotly.offline as po
+# import pandas as pd
 from itsdangerous import URLSafeTimedSerializer as utsr
 from django.contrib.auth import password_validation
 from django.core.files.storage import *
@@ -1033,21 +1033,21 @@ def unit_people_click_bar(data, unit):
     return people_click_graph
 
 
-def unit_people_open_bar(data, unit):
-    graph = {
-        'unit': [],
-        'open_count_rate': [],
-        'open_count': [],
-    }
-    for unit_code in unit:
-        if data[unit_code]['people_open_count_rate'] != 0:
-            graph['unit'].append(unit_code)
-            graph['open_count_rate'].append(data[unit_code]['people_open_count_rate'])
-            graph['open_count'].append(data[unit_code]['open_count'])
-    df = pd.DataFrame(graph, columns=['unit', 'open_count_rate', 'open_count'])
-    df = df.sort_values(by='open_count_rate', ascending=False)
-    people_open_graph = df.to_dict('list')
-    return people_open_graph
+# def unit_people_open_bar(data, unit):
+#     graph = {
+#         'unit': [],
+#         'open_count_rate': [],
+#         'open_count': [],
+#     }
+#     for unit_code in unit:
+#         if data[unit_code]['people_open_count_rate'] != 0:
+#             graph['unit'].append(unit_code)
+#             graph['open_count_rate'].append(data[unit_code]['people_open_count_rate'])
+#             graph['open_count'].append(data[unit_code]['open_count'])
+#     df = pd.DataFrame(graph, columns=['unit', 'open_count_rate', 'open_count'])
+#     df = df.sort_values(by='open_count_rate', ascending=False)
+#     people_open_graph = df.to_dict('list')
+#     return people_open_graph
 
 
 class ProjectResultView(View):
@@ -1159,78 +1159,78 @@ class ProjectAttachmentRecordView(View):
         return render(request, self.template_name, context)
 
 
-class ProjectResultGraphView(View):
-    template_name = 'project/Project_Result_Graph.html'
-
-    @method_decorator(login_required(login_url='login'))
-    @method_decorator(permission_required('SE_server.view_project', (Project, 'ProjectCode', 'pk'), return_403=True))
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
-
-    def get(self, request, pk):
-        project = Project.objects.get(pk=pk)
-        unit = project.UnitList
-        unit_people_count = '{'
-        mail = []
-        for i in range(project.MailCount):
-            mail.append('Mail%d' % (i + 1))
-        member_list = project.TestML.all()
-
-        for i in range(len(unit)):
-            if i == 0:
-                unit_people_count = unit_people_count + '"%s":{"people_count":0,"mail_count":0,"open_count":0,' \
-                                                        '"open_rate":0,"click_count":0,"click_rate":0,' \
-                                                        '"people_click_count":0,"people_open_count":0,' \
-                                                        '"people_click_count_rate":0,"people_open_count_rate":0}' % (
-                                        unit[i])
-            else:
-                unit_people_count = unit_people_count + ',"%s":{"people_count":0,"mail_count":0,"open_count":0,' \
-                                                        '"open_rate":0,"click_count":0,"click_rate":0,' \
-                                                        '"people_click_count":0,"people_open_count":0,' \
-                                                        '"people_click_count_rate":0,"people_open_count_rate":0}' % (
-                                        unit[i])
-        unit_people_count = unit_people_count + '}'
-        data = json.loads(unit_people_count)
-        for member in member_list:
-            people_open_count = False
-            people_click_count = False
-            for mail_count in mail:
-                if member.Result[mail_count]['open']:
-                    people_open_count = True
-                if member.Result[mail_count]['click']:
-                    people_click_count = True
-            if people_click_count:
-                data[member.UnitName]['people_click_count'] += 1
-            if people_open_count:
-                data[member.UnitName]['people_open_count'] += 1
-        for unit_code in unit:
-            for member in project.TestML.filter(UnitName__contains=unit_code):
-                for mail_count in mail:
-                    data[member.UnitName]['open_count'] += member.Result[mail_count]['open']
-                    data[member.UnitName]['click_count'] += member.Result[mail_count]['click']
-            data[unit_code]['people_count'] = len(project.TestML.filter(UnitName__contains=unit_code))
-            data[unit_code]['mail_count'] = len(project.TestML.filter(UnitName__contains=unit_code)) * len(mail)
-            data[unit_code]['open_rate'] = data[unit_code]['open_count'] / (
-                    len(mail) * data[unit_code]['people_count']) * 100
-            data[unit_code]['click_rate'] = data[unit_code]['click_count'] / (
-                    len(mail) * data[unit_code]['people_count']) * 100
-            data[unit_code]['people_click_count_rate'] = data[unit_code]['people_click_count'] / project.MailCount * data[unit_code][
-                'people_count'] * 100
-            data[unit_code]['people_open_count_rate'] = data[unit_code]['people_open_count'] / project.MailCount * data[unit_code][
-                'people_count'] * 100
-        # open_bar = unit_open_bar(data, unit)
-        # click_bar = unit_click_bar(data, unit)
-        people_click_bar = unit_people_click_bar(data, unit)
-        people_open_bar = unit_people_open_bar(data, unit)
-        context = {
-            'Unit_People_Count': data,
-            # 'open_bar': open_bar,
-            # 'click_bar': click_bar,
-            'people_click_bar': people_click_bar,
-            'people_open_bar': people_open_bar,
-        }
-        return render(request, self.template_name, context)
-
+# class ProjectResultGraphView(View):
+#     template_name = 'project/Project_Result_Graph.html'
+#
+#     @method_decorator(login_required(login_url='login'))
+#     @method_decorator(permission_required('SE_server.view_project', (Project, 'ProjectCode', 'pk'), return_403=True))
+#     def dispatch(self, *args, **kwargs):
+#         return super().dispatch(*args, **kwargs)
+#
+#     def get(self, request, pk):
+#         project = Project.objects.get(pk=pk)
+#         unit = project.UnitList
+#         unit_people_count = '{'
+#         mail = []
+#         for i in range(project.MailCount):
+#             mail.append('Mail%d' % (i + 1))
+#         member_list = project.TestML.all()
+#
+#         for i in range(len(unit)):
+#             if i == 0:
+#                 unit_people_count = unit_people_count + '"%s":{"people_count":0,"mail_count":0,"open_count":0,' \
+#                                                         '"open_rate":0,"click_count":0,"click_rate":0,' \
+#                                                         '"people_click_count":0,"people_open_count":0,' \
+#                                                         '"people_click_count_rate":0,"people_open_count_rate":0}' % (
+#                                         unit[i])
+#             else:
+#                 unit_people_count = unit_people_count + ',"%s":{"people_count":0,"mail_count":0,"open_count":0,' \
+#                                                         '"open_rate":0,"click_count":0,"click_rate":0,' \
+#                                                         '"people_click_count":0,"people_open_count":0,' \
+#                                                         '"people_click_count_rate":0,"people_open_count_rate":0}' % (
+#                                         unit[i])
+#         unit_people_count = unit_people_count + '}'
+#         data = json.loads(unit_people_count)
+#         for member in member_list:
+#             people_open_count = False
+#             people_click_count = False
+#             for mail_count in mail:
+#                 if member.Result[mail_count]['open']:
+#                     people_open_count = True
+#                 if member.Result[mail_count]['click']:
+#                     people_click_count = True
+#             if people_click_count:
+#                 data[member.UnitName]['people_click_count'] += 1
+#             if people_open_count:
+#                 data[member.UnitName]['people_open_count'] += 1
+#         for unit_code in unit:
+#             for member in project.TestML.filter(UnitName__contains=unit_code):
+#                 for mail_count in mail:
+#                     data[member.UnitName]['open_count'] += member.Result[mail_count]['open']
+#                     data[member.UnitName]['click_count'] += member.Result[mail_count]['click']
+#             data[unit_code]['people_count'] = len(project.TestML.filter(UnitName__contains=unit_code))
+#             data[unit_code]['mail_count'] = len(project.TestML.filter(UnitName__contains=unit_code)) * len(mail)
+#             data[unit_code]['open_rate'] = data[unit_code]['open_count'] / (
+#                     len(mail) * data[unit_code]['people_count']) * 100
+#             data[unit_code]['click_rate'] = data[unit_code]['click_count'] / (
+#                     len(mail) * data[unit_code]['people_count']) * 100
+#             data[unit_code]['people_click_count_rate'] = data[unit_code]['people_click_count'] / project.MailCount * data[unit_code][
+#                 'people_count'] * 100
+#             data[unit_code]['people_open_count_rate'] = data[unit_code]['people_open_count'] / project.MailCount * data[unit_code][
+#                 'people_count'] * 100
+#         # open_bar = unit_open_bar(data, unit)
+#         # click_bar = unit_click_bar(data, unit)
+#         people_click_bar = unit_people_click_bar(data, unit)
+#         people_open_bar = unit_people_open_bar(data, unit)
+#         context = {
+#             'Unit_People_Count': data,
+#             # 'open_bar': open_bar,
+#             # 'click_bar': click_bar,
+#             'people_click_bar': people_click_bar,
+#             'people_open_bar': people_open_bar,
+#         }
+#         return render(request, self.template_name, context)
+#
 
 class CompamyView(View):
     template_name = 'user/User_Company.html'
