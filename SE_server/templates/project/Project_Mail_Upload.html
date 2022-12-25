@@ -1,0 +1,32 @@
+{% load widget_tweaks %}
+
+{% with WIDGET_ERROR_CLASS='is-valid' %}
+    <form method="POST" action="{{ request.path }}" class="modal-content" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="modal-header">
+            <h1>上傳信件資訊</h1>
+        </div>
+        <div class="modal-body">
+            <h3>請確認資料中包含以下欄位</h3>
+            <p>
+                信件編號(MailNumber),<br>
+                有無附件(HasAtt)<mark>(有:1,無:0)</mark>,<br>
+                信件位址(Address),<br>
+                開啟(Open),<br>
+                點擊(Click),<br>
+                附件(Attachment)<mark>(如無附件則此欄位無須資料)</mark>,<br>
+                <mark>如有中文請確認編碼為UTF-8</mark>
+            </p>
+            <p class="text-danger text-center">檔案類型請選擇csv</p>
+            {{ Form.upload }}
+        </div>
+        <div class="modal-footer">
+            <a href="{% url 'download' type='Mail_Example' %}">下載範例</a>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+            <button type="submit" class="btn btn-primary">儲存</button>
+        </div>
+    </form>
+    {% if message %}
+        <p>錯誤檔案類型<br>請選擇副檔名為csv或者json的檔案</p>
+    {% endif %}
+{% endwith %}

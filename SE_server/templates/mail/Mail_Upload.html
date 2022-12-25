@@ -1,0 +1,24 @@
+{% load widget_tweaks %}
+
+{% with WIDGET_ERROR_CLASS='is-valid' %}
+    <form method="POST" action="{{ request.path }}" class="modal-content" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="modal-header">
+            <h1>上傳信件檔案</h1>
+        </div>
+        <div class="modal-body">
+            <p class="text-danger text-center">檔案類型請選擇html</p>
+            <div class="mb-3">
+                <label class="form-label">選擇信件檔案</label>
+                <input type="file" class="form-control" name="uploaded_file" accept="text/html">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+            <button type="submit" class="btn btn-primary">儲存</button>
+        </div>
+    </form>
+    {% if message %}
+        <p>錯誤檔案類型<br>請選擇副檔名為csv或者json的檔案</p>
+    {% endif %}
+{% endwith %}

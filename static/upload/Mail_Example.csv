@@ -1,0 +1,3 @@
+MailNumber,HasAtt,Address,Open,Click,Attachment
+Mail1,1,/example01/,open.png,click.html,attachment.png
+Mail2,0,/example02/,open.png,click.html,

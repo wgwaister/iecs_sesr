@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load Template_Filter %}
+{% load guardian_tags %}
+
+
+
+{% block breadcrumb %}
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="{% url 'project' %}">{{ Project.CompanyCode.CompanyName }}</a></li>
+        <li class="breadcrumb-item"><a href="/project/{{ Project.ProjectCode }}">
+            {{ Project.ProjectName }}</a></li>
+        <li class="breadcrumb-item active">寄信紀錄</li>
+    </ol>
+{% endblock %}
+
+{% block script01 %}
+    <script>
+        // Jquery Datatable
+        let jquery_datatable = $("#send_record").DataTable({
+            "retrieve": true,
+            "language": {
+                "processing": "處理中...",
+                "loadingRecords": "載入中...",
+                "lengthMenu": "顯示 _MENU_ 項結果",
+                "zeroRecords": "沒有符合的結果",
+                "info": "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+                "infoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+                "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+                "infoPostFix": "",
+                "search": "搜尋:",
+                "paginate": {
+                    "first": "第一頁",
+                    "previous": "上一頁",
+                    "next": "下一頁",
+                    "last": "最後一頁"
+                },
+                "aria": {
+                    "sortAscending": ": 升冪排列",
+                    "sortDescending": ": 降冪排列"
+                }
+            }
+        })
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="page-content">
+        <section class="row mx-auto">
+            <h1 class="mb-4">寄送紀錄</h1>
+            <div class="row col-12 mx-auto justify-content-between">
+                {% block project %}
+                    {% include 'navbar.html' %}
+                {% endblock %}
+            </div>
+            <div class="row col-12 mx-auto">
+                <div class="card">
+                    <div class="card-body">
+                        <br>
+                        {% if Project.SendRecord %}
+                            <table class="table" id="send_record" style="text-align:center;overflow-x: auto;
+                                                                            white-space: nowrap;">
+                                <thead>
+                                <tr>
+                                    <th scope="col">時間</th>
+                                    <th scope="col">操作者</th>
+                                                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for record in Project.SendRecord %}
+                                    <tr>
+                                        {% for a,b in record.items %}
+                                            <td>{{ b.send_date_time }}</td>
+                                            <td>{{ b.send_user }}</td>
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <h1>無寄送紀錄</h1>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock %}

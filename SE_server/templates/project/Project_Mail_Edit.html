@@ -1,0 +1,78 @@
+{% load widget_tweaks %}
+
+{% with WIDGET_ERROR_CLASS='is-valid' %}
+    <form method="POST" action="{{ request.path }}" class="modal-content" novalidate>
+        {% csrf_token %}
+        <div class="modal-header">
+            <h1>編輯信件資訊</h1>
+        </div>
+        <div class="modal-body">
+{#            <div class="mb-3">#}
+{#                <label for="{{ form.ProjectCode.is_for_label }}" class="form-label">專案代碼</label>#}
+{#                <input type="text" name="ProjectCode" maxlength="50" class="form-control" id="id_ProjectCode"#}
+{#                       value="{{ Mail.ProjectCode.ProjectCode }}" readonly="readonly">#}
+{#                <div class="invalid-feedback">{{ form.ProjectCode.errors|first }}</div>#}
+{#            </div>#}
+{#            <div class="mb-3">#}
+{#                <label for="{{ form.MailNumber.is_for_label }}" class="form-label">信件編號</label>#}
+{#                {% render_field form.MailNumber class="form-control" %}#}
+{#                <div class="invalid-feedback">{{ form.MailNumber.errors|first }}</div>#}
+{#            </div>#}
+{#            <div class="mb-3">#}
+{#                <label for="{{ form.Type.is_for_label }}"#}
+{#                       class="form-label">信件類型</label>#}
+{#                {% render_field form.Type class="form-control" %}#}
+{#                <div class="invalid-feedback">{{ form.Type.errors|first }}</div>#}
+{#            </div>#}
+            <div class="mb-3">
+                <label for="{{ form.Title.is_for_label }}" class="form-label">信件主旨</label>
+                {% render_field form.Title class="form-control" %}
+                <div class="invalid-feedback">{{ form.Title.errors|first }}</div>
+            </div>
+{#            <div class="mb-3">#}
+{#                <label for="{{ form.MailTag.is_for_label }}" class="form-label">信件標籤</label>#}
+{#                {% render_field form.MailTag class="form-control" %}#}
+{#                <div class="invalid-feedback">{{ form.MailTag.errors|first }}</div>#}
+{#            </div>#}
+            <div class="mb-3">
+                <label for="{{ form.Sender.is_for_label }}" class="form-label">寄件者</label>
+                {% render_field form.Sender class="form-control" %}
+                <div class="invalid-feedback">{{ form.Sender.errors|first }}</div>
+            </div>
+            <div class="mb-3">
+                <label for="{{ form.Sender_Mail.is_for_label }}" class="form-label">寄件者電子郵件</label>
+                {% render_field form.Sender_Mail class="form-control" %}
+                <div class="invalid-feedback">{{ form.Sender_Mail.errors|first }}</div>
+            </div>
+{#            <div class="mb-3">#}
+{#                <label for="{{ form.HasAtt.is_for_label }}" class="form-label">有無附件</label>#}
+{#                {% render_field form.HasAtt class="form-control" placeholder="False" %}#}
+{#                <div class="invalid-feedback">{{ form.HasAtt.errors|first }}</div>#}
+{#            </div>#}
+{#            <div class="mb-3">#}
+{#                <label for="{{ form.Address.is_for_label }}" class="form-label">信件位址</label>#}
+{#                {% render_field form.Address class="form-control" %}#}
+{#                <div class="invalid-feedback">{{ form.Address.errors|first }}</div>#}
+{#            </div>#}
+{#            <div class="mb-3">#}
+{#                <label for="{{ form.Open.is_for_label }}" class="form-label">開啟</label>#}
+{#                {% render_field form.Open class="form-control" %}#}
+{#                <div class="invalid-feedback">{{ form.Open.errors|first }}</div>#}
+{#            </div>#}
+{#            <div class="mb-3">#}
+{#                <label for="{{ form.Click.is_for_label }}" class="form-label">點擊</label>#}
+{#                {% render_field form.Click class="form-control" %}#}
+{#                <div class="invalid-feedback">{{ form.Click.errors|first }}</div>#}
+{#            </div>#}
+{#            <div class="mb-3">#}
+{#                <label for="{{ form.Attachment.is_for_label }}" class="form-label">附件</label>#}
+{#                {% render_field form.Attachment class="form-control" placeholder="Attachment.png(無附件無須填寫)" %}#}
+{#                <div class="invalid-feedback">{{ form.Attachment.errors|first }}</div>#}
+{#            </div>#}
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+            <button type="submit" class="btn btn-primary">儲存</button>
+        </div>
+    </form>
+{% endwith %}

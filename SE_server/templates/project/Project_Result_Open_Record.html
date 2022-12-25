@@ -1,0 +1,62 @@
+<h4>開啟觸發紀錄</h4>
+<p>說明：載入信件內圖片會觸發並記錄於此，實際情境中社交信件內的圖片可能蘊藏惡意程式碼!</p>
+{% if Open_Record %}
+    <table class="table" id="table2" style="text-align:center;overflow-x: auto;
+                                                                            white-space: nowrap;">
+        <thead>
+        <tr>
+            <th scope="col">時間</th>
+            <th scope="col">信件主旨</th>
+            <th scope="col">寄件人</th>
+            <th scope="col">組別</th>
+            <th scope="col">E-mail</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for record in Open_Record %}
+            <tr>
+                {% for a,b in record.items %}
+                    <td>{{ b.Date }}</td>
+                    <td>{{ b.Mail }}</td>
+                    <td>{{ b.Sender }}</td>
+                    <td>{{ b.Unit }}</td>
+                    <td>{{ b.Email }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <h1>無觸發紀錄</h1>
+{% endif %}
+
+<script>
+    // Jquery Datatable
+    $(document).ready(function () {
+        $("#table2").DataTable({
+            "searching": false,
+            "retrieve": true,
+            "language": {
+                "processing": "處理中...",
+                "loadingRecords": "載入中...",
+                "lengthMenu": "顯示 _MENU_ 項結果",
+                "zeroRecords": "沒有符合的結果",
+                "info": "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+                "infoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+                "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+                "infoPostFix": "",
+                "search": "搜尋:",
+                "paginate": {
+                    "first": "第一頁",
+                    "previous": "上一頁",
+                    "next": "下一頁",
+                    "last": "最後一頁"
+                },
+                "aria": {
+                    "sortAscending": ": 升冪排列",
+                    "sortDescending": ": 降冪排列"
+                }
+            }
+        })
+    });
+</script>

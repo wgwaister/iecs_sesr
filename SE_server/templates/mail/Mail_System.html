@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load Template_Filter %}
+{% load guardian_tags %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="{% url 'project' %}">{{ Project.CompanyCode.CompanyName }}</a></li>
+        <li class="breadcrumb-item"><a href="/project/{{ Project.ProjectCode }}">
+            {{ Project.ProjectName }}</a></li>
+        <li class="breadcrumb-item active">寄送信件</li>
+    </ol>
+{% endblock %}
+
+
+{% block script %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var chEltMail = document.getElementById("checkMailAll");//1.獲取checkbo的元素物件
+            chEltMail.checked = true;
+            var allCheckMail = document.getElementsByName("checkMail");//3.若checked=true,將所有的複選框選中,checked=false,將所有的複選框取消
+            for (var i = 0; i < allCheckMail.length; i++) {
+                if (!allCheckMail[i].checked) {
+                    chEltMail.checked = false
+                }
+            }
+        });
+
+        function checkOrCancelAllMail() {
+            var chElt = document.getElementById("checkMailAll");//1.獲取checkbo的元素物件
+            var checkedElt = chElt.checked;//2.獲取選中狀態
+            var allCheck = document.getElementsByName("checkMail");//3.若checked=true,將所有的複選框選中,checked=false,將所有的複選框取消
+            //var allCheck = document.getElementsByName("file");//方法2
+            if (checkedElt)//全選
+            {
+                for (var i = 0; i < allCheck.length; i++) {
+                    //設定複選框的選中狀態
+                    allCheck[i].checked = true;
+                }
+            } else//取消全選
+            {
+                for (var i = 0; i < allCheck.length; i++) {
+                    allCheck[i].checked = false;
+                }
+            }
+        }
+
+        function setallmail() {
+            var chEltMail = document.getElementById("checkMailAll");//1.獲取checkbo的元素物件
+            chEltMail.checked = true;
+            var allCheckMail = document.getElementsByName("checkMail");//3.若checked=true,將所有的複選框選中,checked=false,將所有的複選框取消
+            //var allCheck = document.getElementsByName("file");//方法2
+            for (var i = 0; i < allCheckMail.length; i++) {
+                if (!allCheckMail[i].checked) {
+                    chEltMail.checked = false
+                }
+            }
+        }
+    </script>
+{% endblock %}
+
+
+{% block content %}
+    <div class="page-content">
+        <section class="row mx-auto">
+            <h1 class="mb-4">寄送信件</h1>
+            <div class="row col-12 mx-auto justify-content-between">
+                {% block project %}
+                    {% include 'navbar.html' %}
+                {% endblock %}
+            </div>
+            <div class="row mx-auto">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>選擇欲發送信件</h4>
+                        <p>請勾選欲發送信件或上傳信件檔案</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="row col-12 mx-auto">
+                            <div class="row mx-auto table-responsive">
+                                <form method="POST" action="{{ request.path }}" novalidate>
+                                    {% csrf_token %}
+                                    <table class="table" id="table1" style="text-align:center;overflow-x: auto;
+                                                                            white-space: nowrap;">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col"><input id="checkMailAll" type="checkbox"
+                                                                   onclick="checkOrCancelAllMail();"
+                                                                   name="checkALLMail"/></th>
+                                            <th scope="col">主旨</th>
+                                            <th scope="col">寄送人</th>
+                                            <th scope="col">寄送人電子郵件</th>
+{#                                            <th scope="col">信件檔案存放位置</th>#}
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for MF in Project.Mail.all %}
+                                            {% if MF.filepath %}
+                                                <tr>
+                                                    <td><input type="checkbox" name="checkMail" id="{{ MF.pk }}"
+                                                               onclick="setallmail();" value="{{ MF.pk }}"/></td>
+                                                    <td>{{ MF.Title }}</td>
+                                                    <td>{{ MF.Sender }}</td>
+                                                    <td>{{ MF.Sender_Mail }}</td>
+{#                                                    <td>{{ MF.filepath }}</td>#}
+                                                </tr>
+                                            {% endif %}
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    <div class="row col-12 mx-auto">
+                                        <div class="mb-3">
+                                            <button type="submit"
+                                                    class="btn btn-primary align-self-end float-right col-auto">下一步
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+{% endblock %}

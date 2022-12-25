@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% load Template_Filter %}
+{% load guardian_tags %}
+
+
+{% block breadcrumb %}
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="{% url 'project' %}">{{ Project.CompanyCode.CompanyName }}</a></li>
+        <li class="breadcrumb-item"><a href="/project/{{ Project.ProjectCode }}">
+            {{ Project.ProjectName }}</a></li>
+        <li class="breadcrumb-item active">信件資訊</li>
+    </ol>
+{% endblock %}
+
+{% block style %}
+    button {
+    border-width:0px;
+    }
+{% endblock %}
+
+{% block content %}
+    <div class="page-content">
+        <section class="row mx-auto">
+            <h1 class="mb-4">信件資訊</h1>
+            <div class="row col-12 mx-auto justify-content-between">
+                {% block project %}
+                    {% include 'navbar.html' %}
+                {% endblock %}
+            </div>
+            <div class="row mx-auto">
+                <div class="card">
+                    <div class="card-body">
+                        {% get_obj_perms request.user for Project as 'project_perms' %}
+{#                        {% if 'exe_project' in project_perms %}#}
+{#                            <div class="row mx-auto">#}
+{#                                <div class="col-auto">#}
+{#                                    <button type="button" class="btn-sm btn-primary"#}
+{#                                            hx-get="{% url 'create_PM' pk=Project.pk %}"#}
+{#                                            hx-target="#dialog">新增單筆#}
+{#                                    </button>#}
+{#                                </div>#}
+{#                                <div class="col-auto">#}
+{#                                    <button type="button" class="btn-sm btn-primary"#}
+{#                                            hx-get="{% url 'upload_PM' pk=Project.pk %}"#}
+{#                                            hx-target="#dialog">上傳多筆#}
+{#                                    </button>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        {% endif %}#}
+                        <br>
+                        {% if Have %}
+                            <div class="row mx-auto table-responsive">
+                                <table class="table table-striped col-auto" id="table1" style="text-align:center;overflow-x: auto;
+                                                                            white-space: nowrap;">
+                                    <thead>
+                                    <tr>
+{#                                        <th scope="col">信件類型</th>#}
+                                        <th scope="col">主旨</th>
+                                        <th scope="col">寄送人</th>
+                                        <th scope="col">寄送人電子郵件</th>
+{#                                        <th scope="col">有無附件</th>#}
+                                        {% get_obj_perms request.user for Project as 'project_perms' %}
+                                        {% if 'exe_project' in project_perms %}
+                                            <th scope="col">修改信件資訊</th>
+{#                                            <th scope="col">上傳信件</th>#}
+{#                                            <th scope="col">上傳附件</th>#}
+{#                                            <th scope="col">下載信件</th>#}
+                                        {% endif %}
+                                        <th scope="col">查看</th>
+                                        {% get_obj_perms request.user for Project as 'project_perms' %}
+                                        {% if 'exe_project' in project_perms %}
+{#                                            <th scope="col">刪除</th>#}
+                                        {% endif %}
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for PM in Project.Mail.all %}
+                                        <tr>
+{#                                            <td>{{ PM.Type }}</td>#}
+                                            <td>{{ PM.Title }}</td>
+                                            <td>{{ PM.Sender }}</td>
+                                            <td>{{ PM.Sender_Mail }}</td>
+{#                                            <td>{{ PM.HasAtt|boolean_trans }}</td>#}
+                                            {% get_obj_perms request.user for Project as 'project_perms' %}
+                                            {% if 'exe_project' in project_perms %}
+                                                <td>
+                                                    <button type="button" class="btn-sm btn-primary"
+                                                            hx-get="{% url 'edit_PM' pk=Project.pk id=PM.id %}"
+                                                            hx-target="#dialog">
+                                                        修改信件資訊
+                                                    </button>
+                                                </td>
+{#                                                <td>#}
+{#                                                    <button type="button" class="btn-sm btn-primary"#}
+{#                                                            hx-get="{% url 'upload_mail' pk=Project.pk id=PM.pk %}"#}
+{#                                                            hx-target="#dialog">上傳信件#}
+{#                                                    </button>#}
+{#                                                </td>#}
+{#                                                <td>#}
+{#                                                    {% if PM.HasAtt %}#}
+{#                                                        <button type="button" class="btn btn-sm btn-primary"#}
+{#                                                                hx-get="{% url 'attachment_upload' pk=Project.pk id=PM.pk %}"#}
+{#                                                                hx-target="#dialog">上傳附件#}
+{#                                                        </button>#}
+{#                                                    {% else %}#}
+{#                                                        <button type="button" class="btn btn-sm btn-primary" disabled>#}
+{#                                                            上傳附件#}
+{#                                                        </button>#}
+{#                                                    {% endif %}#}
+{#                                                </td>#}
+{#                                                {% if PM.filepath %}#}
+{#                                                    <td>#}
+{#                                                        <button href="{% url 'mail_download' pk=Project.pk id=PM.pk %}"#}
+{#                                                                class="btn-sm btn-primary">下載信件#}
+{#                                                        </button>#}
+{#                                                    </td>#}
+{#                                                {% else %}#}
+{#                                                    <td>#}
+{#                                                        <a href="#" class="btn btn-sm disabled btn-primary">下載信件</a>#}
+{#                                                    </td>#}
+{#                                                {% endif %}#}
+                                            {% endif %}
+                                            {% if PM.filepath %}
+                                                <td><a href="{% url 'mail_file' pk=Project.pk id=PM.pk %}"
+                                                       target="_blank" class="btn-sm btn-primary">查看</a>
+                                                </td>
+                                            {% else %}
+                                                <td><a href="#" class="btn btn-sm disabled btn-primary">查看</a>
+                                                </td>
+                                            {% endif %}
+                                            {% get_obj_perms request.user for Project as 'project_perms' %}
+{#                                            {% if 'exe_project' in project_perms %}#}
+{#                                                <td>#}
+{#                                                    <button type="button"#}
+{#                                                            hx-get="{% url 'delete_PM' pk=Project.pk id=PM.id %}"#}
+{#                                                            hx-target="#dialog" class="btn-sm btn-danger">刪除#}
+{#                                                    </button>#}
+{#                                                </td>#}
+{#                                            {% endif %}#}
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="row mx-auto">
+                                <h3>此專案尚無信件資訊</h3>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock %}

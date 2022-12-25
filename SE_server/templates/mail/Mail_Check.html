@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load Template_Filter %}
+{% load guardian_tags %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="{% url 'project' %}">專案列表</a></li>
+        <li class="breadcrumb-item"><a href="/project/{{ Project.ProjectCode }}">
+            {{ Project.CompanyCode.CompanyName }}{{ Project.ProjectName }}</a></li>
+        <li class="breadcrumb-item active">寄送信件</li>
+    </ol>
+{% endblock %}
+
+
+{% block script %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var chEltMail = document.getElementById("checkMailAll");//1.獲取checkbo的元素物件
+            chEltMail.checked = true;
+            var allCheckMail = document.getElementsByName("checkMail");//3.若checked=true,將所有的複選框選中,checked=false,將所有的複選框取消
+            for (var i = 0; i < allCheckMail.length; i++) {
+                if (!allCheckMail[i].checked) {
+                    chEltMail.checked = false
+                }
+            }
+        });
+
+        function checkOrCancelAllMail() {
+            var chElt = document.getElementById("checkMailAll");//1.獲取checkbo的元素物件
+            var checkedElt = chElt.checked;//2.獲取選中狀態
+            var allCheck = document.getElementsByName("checkMail");//3.若checked=true,將所有的複選框選中,checked=false,將所有的複選框取消
+            //var allCheck = document.getElementsByName("file");//方法2
+            if (checkedElt)//全選
+            {
+                for (var i = 0; i < allCheck.length; i++) {
+                    //設定複選框的選中狀態
+                    allCheck[i].checked = true;
+                }
+            } else//取消全選
+            {
+                for (var i = 0; i < allCheck.length; i++) {
+                    allCheck[i].checked = false;
+                }
+            }
+        }
+
+        function setallmail() {
+            var chEltMail = document.getElementById("checkMailAll");//1.獲取checkbo的元素物件
+            chEltMail.checked = true;
+            var allCheckMail = document.getElementsByName("checkMail");//3.若checked=true,將所有的複選框選中,checked=false,將所有的複選框取消
+            //var allCheck = document.getElementsByName("file");//方法2
+            for (var i = 0; i < allCheckMail.length; i++) {
+                if (!allCheckMail[i].checked) {
+                    chEltMail.checked = false
+                }
+            }
+        }
+    </script>
+{% endblock %}
+
+
+{% block content %}
+    <div class="page-content">
+        <section class="row mx-auto">
+            <h1 class="mb-4">寄送信件</h1>
+            <div class="row col-12 mx-auto justify-content-between">
+                {% block project %}
+                    {% include 'navbar.html' %}
+                {% endblock %}
+            </div>
+            <div class="row mx-auto">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>確認寄信資訊</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row col-12 mx-auto">
+                            <div class="row mx-auto table-responsive">
+                                <h6>即將發送信件</h6>
+                                <p>即將發送{{ mail_file }}封信件至{{ send_member }}位受測人員</p>
+                            </div>
+                            <div class="row">
+                                <div class="mb-3">
+                                    <a href="{% url 'Mail_Send' pk=Project.pk %}"
+                                       class="btn btn-primary align-self-end float-right col-auto">發送</a>
+                                    <p class="align-self-end float-right col-auto"></p>
+                                    <a href="{% url 'Mail_Recipient' pk=Project.pk %}"
+                                       class="btn btn-primary align-self-end float-right col-auto">上一步</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock %}

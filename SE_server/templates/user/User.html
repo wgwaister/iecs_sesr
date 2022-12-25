@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% load Template_Filter %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'company' %}">課程列表</a></li>
+        <li class="breadcrumb-item active">教師帳號列表</li>
+    </ol>
+{% endblock %}
+
+
+{% block content %}
+    <div class="page-heading">
+    </div>
+    <div class="page-content">
+        <section class="row mx-auto">
+            <h3>教師帳號列表</h3>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mx-auto">
+                        <div class="col-1">
+                            <button type="button" class="btn btn-primary"
+                                    hx-get="{% url 'user_create' pk=Company.pk %}"
+                                    hx-target="#dialog">
+                                新增
+                            </button>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row mx-auto">
+                        <table class="table table-striped" id="table1" style="text-align:center;overflow-x: auto;
+                                                                            white-space: nowrap;">
+                            <thead>
+                            <tr>
+                                <th>編號</th>
+                                <th>帳號</th>
+                                <th>修改</th>
+                                <th>刪除</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for uu in Company_User %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ uu.username }}</td>
+                                    <td>
+                                        <a class="btn-sm btn-primary"
+                                           href="{% url 'user_edit' pk=Company.pk id=uu.id url='company' %}">
+                                            修改
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <button type="button"
+                                                hx-get="{% url 'user_delete' pk=Company.CompanyCode id=uu.id %}"
+                                                hx-target="#dialog" class="btn-sm btn-danger">刪除
+                                        </button>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock %}

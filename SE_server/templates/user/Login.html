@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block script %}
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render={{ recaptcha_site_key }}"></script>
+    <script>
+        grecaptcha.ready(function () {
+            grecaptcha.execute('{{recaptcha_site_key}}', {action: "/login/"}).then(function (token) {
+                document.getElementById('g-recaptcha-response').value = token;
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block main %}
+{% endblock %}
+
+{% block project %}
+{% endblock %}
+
+{% block content %}
+    <div class="page-heading">
+        <br>
+        <br>
+    </div>
+    <div class="page-content">
+        <section class="row col-12 mx-auto">
+            <div class="row col-6 offset-3 mx-auto">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="LoginTitle" style="text-align:center;">登入</h3>
+                        <form action="" method="POST" class="loginForm col" id="loginform">
+                            <div class="row mx-auto">
+                                {% csrf_token %}
+                                {{ form.as_p }}
+                                <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
+                                <br>
+                            </div>
+                            <div class="row mx-auto">
+                                <a class="col-4" href="{% url 'forgot_password' %}">忘記密碼</a>
+                            </div>
+                            <div class="row mx-auto">
+                                <input class="btn btn-primary login col-3 offset-9" type="submit" value="登入"/>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock %}

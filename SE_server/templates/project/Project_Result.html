@@ -1,0 +1,379 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% load Template_Filter %}
+
+{% block style %}
+    input.search-input {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    width: 100%;
+    margin-bottom: 5px;
+    height: auto;
+    }
+{% endblock %}
+
+{% block script %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var chEltUnit = document.getElementById("checkUnitall");//1.獲取checkbo的元素物件
+            chEltUnit.checked = true;
+            var allCheckUnit = document.getElementsByName("Unit");//3.若checked=true,將所有的複選框選中,checked=false,將所有的複選框取消
+            for (var i = 0; i < allCheckUnit.length; i++) {
+                if (!allCheckUnit[i].checked) {
+                    chEltUnit.checked = false
+                }
+            }
+            var chEltMail = document.getElementById("checkMailall");//1.獲取checkbo的元素物件
+            chEltMail.checked = true;
+            var allCheckMail = document.getElementsByName("Mail");//3.若checked=true,將所有的複選框選中,checked=false,將所有的複選框取消
+            for (var i = 0; i < allCheckMail.length; i++) {
+                if (!allCheckMail[i].checked) {
+                    chEltMail.checked = false
+                }
+            }
+
+        });
+
+        function checkOrCancelAllUnit() {
+            var chElt = document.getElementById("checkUnitall");//1.獲取checkbo的元素物件
+            var checkedElt = chElt.checked;//2.獲取選中狀態
+            var allCheck = document.getElementsByName("Unit");//3.若checked=true,將所有的複選框選中,checked=false,將所有的複選框取消
+            //var allCheck = document.getElementsByName("file");//方法2
+            if (checkedElt)//全選
+            {
+                for (var i = 0; i < allCheck.length; i++) {
+                    //設定複選框的選中狀態
+                    allCheck[i].checked = true;
+                }
+            } else//取消全選
+            {
+                for (var i = 0; i < allCheck.length; i++) {
+                    allCheck[i].checked = false;
+                }
+            }
+        }
+
+        function checkOrCancelAllMail() {
+            var chElt = document.getElementById("checkMailall");//1.獲取checkbo的元素物件
+            var checkedElt = chElt.checked;//2.獲取選中狀態
+            var allCheck = document.getElementsByName("Mail");//3.若checked=true,將所有的複選框選中,checked=false,將所有的複選框取消
+            //var allCheck = document.getElementsByName("file");//方法2
+            if (checkedElt)//全選
+            {
+                for (var i = 0; i < allCheck.length; i++) {
+                    //設定複選框的選中狀態
+                    allCheck[i].checked = true;
+                }
+            } else//取消全選
+            {
+                for (var i = 0; i < allCheck.length; i++) {
+                    allCheck[i].checked = false;
+                }
+            }
+        }
+
+        function setallunit() {
+            var chEltUnit = document.getElementById("checkUnitall");//1.獲取checkbo的元素物件
+            chEltUnit.checked = true;
+            var allCheckUnit = document.getElementsByName("Unit");//3.若checked=true,將所有的複選框選中,checked=false,將所有的複選框取消
+            //var allCheck = document.getElementsByName("file");//方法2
+            for (var i = 0; i < allCheckUnit.length; i++) {
+                if (!allCheckUnit[i].checked) {
+                    chEltUnit.checked = false
+                }
+            }
+        }
+
+        function setallmail() {
+            var chEltMail = document.getElementById("checkMailall");//1.獲取checkbo的元素物件
+            chEltMail.checked = true;
+            var allCheckMail = document.getElementsByName("Mail");//3.若checked=true,將所有的複選框選中,checked=false,將所有的複選框取消
+            //var allCheck = document.getElementsByName("file");//方法2
+            for (var i = 0; i < allCheckMail.length; i++) {
+                if (!allCheckMail[i].checked) {
+                    chEltMail.checked = false
+                }
+            }
+        }
+    </script>
+{% endblock %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="{% url 'project' %}">{{ Project.CompanyCode.CompanyName }}</a></li>
+        <li class="breadcrumb-item"><a href="/project/{{ Project.ProjectCode }}">
+            {{ Project.ProjectName }}</a></li>
+        <li class="breadcrumb-item active">統計結果</li>
+    </ol>
+{% endblock %}
+
+{% block content %}
+    <div class="page-content">
+        <section class="row mx-auto">
+            <h1 class="mb-4">統計結果</h1>
+            <div class="row col-12 mx-auto justify-content-between">
+                {% block project %}
+                    {% include 'navbar.html' %}
+                {% endblock %}
+            </div>
+            <div class="row mx-auto">
+                <div class="card">
+                    <div class="card-header">
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link active" id="result-tab" data-bs-toggle="tab" href="#result"
+                                   role="tab"
+                                   aria-controls="result" aria-selected="true">統計總表</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="open_record-tab" data-bs-toggle="tab" href="#open_record"
+                                   role="tab"
+                                   aria-controls="open_record" aria-selected="false">開啟觸發紀錄</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="click_record-tab" data-bs-toggle="tab" href="#click_record"
+                                   role="tab"
+                                   aria-controls="click_record" aria-selected="false">點擊觸發紀錄</a>
+                            </li>
+{#                            <li class="nav-item" role="presentation">#}
+{#                                <a class="nav-link" id="unit_result-tab" data-bs-toggle="tab"#}
+{#                                   href="#unit_result" role="tab"#}
+{#                                   aria-controls="unit_result" aria-selected="false">組別統計結果</a>#}
+{#                            </li>#}
+{#                            <li class="nav-item" role="presentation">#}
+{#                                    <a class="nav-link" id="attachment_record-tab" data-bs-toggle="tab"#}
+{#                                       href="#attachment_record" role="tab"#}
+{#                                       aria-controls="attachment_record" aria-selected="false">附件觸發紀錄</a>#}
+{#                                </li>#}
+
+                            {% if second_phase %}
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" id="all_score-tab" data-bs-toggle="tab" href="#all_score"
+                                       role="tab"
+                                       aria-controls="all_score" aria-selected="false">信件回報狀況</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content" id="myTabContent">
+                            <div class="row">
+{#                                <p class="text-end">最後更新時間{{ Project.lastCalTime }}</p>#}
+                            </div>
+                            <div class="row table-responsive tab-pane fade show active mx-auto" id="result"
+                                 role="tabpanel" aria-labelledby="result-tab">
+{#                                <h4>個人統計結果</h4>#}
+{#                                <div class="row col-12 mx-auto">#}
+{#                                    <form action=" " method="get">#}
+{#                                        <div class="row col-12 mx-auto">#}
+{#                                            <div class="col-md-6 mb-4 text-center">#}
+{#                                                <h6>選擇顯示組別</h6>#}
+{#                                                <p>請在此選擇欲顯示組別</p>#}
+{#                                                <div class="form-group">#}
+{#                                                    <input id="checkUnitall" type="checkbox" name="checkALLUnit"#}
+{#                                                           onclick="checkOrCancelAllUnit();"/>#}
+{#                                                    <label for="checkUnitall">#}
+{#                                                        全選#}
+{#                                                    </label>#}
+{#                                                    <br>#}
+{#                                                    <div class="row justify-content-center">#}
+{#                                                        {% for unit in Unit %}#}
+{#                                                            <div class="col-auto">#}
+{#                                                                {% if unit in Search_Unit %}#}
+{#                                                                    <input type="checkbox" name="Unit" class="Unit"#}
+{#                                                                           id="{{ unit }}"#}
+{#                                                                           onclick="setallunit();" value="{{ unit }}"#}
+{#                                                                           checked>#}
+{#                                                                    <label for="{{ unit }}">#}
+{#                                                                        {{ unit }}#}
+{#                                                                    </label>#}
+{#                                                                {% else %}#}
+{#                                                                    <input type="checkbox" name="Unit" class="Unit"#}
+{#                                                                           id="{{ unit }}"#}
+{#                                                                           onclick="setallunit();" value="{{ unit }}"/>#}
+{#                                                                    <label for="{{ unit }}">#}
+{#                                                                        {{ unit }}#}
+{#                                                                    </label>#}
+{#                                                                {% endif %}#}
+{#                                                                {% if forloop.counter|divisibleby:"13" %}#}
+{#                                                                    <br>#}
+{#                                                                {% endif %}#}
+{#                                                            </div>#}
+{#                                                        {% endfor %}#}
+{#                                                    </div>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                            <div class="col-md-6 mb-4 text-center">#}
+{#                                                <h6>選擇顯示信件</h6>#}
+{#                                                <p>請在此選擇欲顯示信件</p>#}
+{#                                                <div class="form-group">#}
+{#                                                    <input id="checkMailall" type="checkbox" name="checkALLMail"#}
+{#                                                           onclick="checkOrCancelAllMail();"/>#}
+{#                                                    <label for="checkMailall">#}
+{#                                                        全選#}
+{#                                                    </label>#}
+{#                                                    <br>#}
+{#                                                    <div class="row justify-content-center">#}
+{#                                                        {% for mail in Project.Mail.all %}#}
+{#                                                            <div class="col-auto">#}
+{#                                                                {% if mail.MailTag in Search_Mail %}#}
+{#                                                                    <input type="checkbox" name="Mail" class="Mail"#}
+{#                                                                           onclick="setallmail();"#}
+{#                                                                           id="{{ mail.MailTag }}"#}
+{#                                                                           value="{{ mail.MailTag }}" checked>#}
+{#                                                                    <label for="{{ mail.MailTag }}">#}
+{#                                                                        {{ mail.MailTag }}#}
+{#                                                                    </label>#}
+{#                                                                {% else %}#}
+{#                                                                    <input type="checkbox" name="Mail" class="Mail"#}
+{#                                                                           onclick="setallmail();"#}
+{#                                                                           id="{{ mail.MailTag }}"#}
+{#                                                                           value="{{ mail.MailTag }}">#}
+{#                                                                    <label for="{{ mail.MailTag }}">#}
+{#                                                                        {{ mail.MailTag }}#}
+{#                                                                    </label>#}
+{#                                                                {% endif %}#}
+{#                                                            </div>#}
+{#                                                        {% endfor %}#}
+{#                                                    </div>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                            <div class="mb-3">#}
+{#                                                <button type="submit"#}
+{#                                                        class="btn btn-primary align-self-end float-right col-auto">#}
+{#                                                    開始篩選#}
+{#                                                </button>#}
+{#                                                <p class="align-self-end float-right col-auto"></p>#}
+{#                                                <a href="{% url 'PR' pk=Project.pk %}"#}
+{#                                                   class="btn btn-primary align-self-end float-right col-auto">清除篩選條件</a>#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    </form>#}
+{#                                </div>#}
+                                <div class="row col-12 mx-auto">
+                                    <div class="row mx-auto">
+                                        <div class="row text-end mx-auto">
+                                            <h5>顯示方式:開啟數/點擊數</h5>
+                                        </div>
+                                        <table class="table" id="table1" style="text-align:center;overflow-x: auto;
+                                                                            white-space: nowrap;">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col">組別名稱</th>
+                                                <th scope="col">Email</th>
+                                                {% for mail in Mail %}
+                                                    {% if mail in Search_Mail %}
+                                                        <th>{{ mail }}</th>
+                                                    {% endif %}
+                                                {% endfor %}
+                                                <th scope="col">總和</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for TML in Project.TestML.all %}
+                                                {% if TML.UnitName in Search_Unit %}
+                                                    <tr>
+                                                        <td>{{ TML.UnitName }}</td>
+                                                        <td>{{ TML.Email }}</td>
+                                                        {% for result,a in TML.Result.items %}
+                                                            {% if a.name in Search_Mail %}
+                                                                <td>{{ a.open }}/{{ a.click }}</td>
+                                                            {% elif result in 'Total' %}
+                                                                <td>{{ a.open }}/{{ a.click }}</td>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </tr>
+                                                {% endif %}
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row table-responsive tab-pane fade mx-auto" id="open_record" role="tabpanel"
+                                 aria-labelledby="open_record-tab"
+                                 hx-get="{% url 'PR_open_record' Project.pk %}"
+                                 hx-trigger="load,revealed">
+                                <div class="mt-2">
+                                    <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row table-responsive tab-pane fade mx-auto" id="click_record" role="tabpanel"
+                                 aria-labelledby="click_record-tab"
+                                 hx-get="{% url 'PR_click_record' Project.pk %}"
+                                 hx-trigger="load,revealed">
+                                <div class="mt-2">
+                                    <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row table-responsive tab-pane fade mx-auto" id="unit_result" role="tabpanel"
+                                 aria-labelledby="unit_result-tab" hx-get="{% url 'PR_Graph' Project.pk %}"
+                                 hx-trigger="load,revealed">
+                                <div class="mt-2">
+                                    <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row table-responsive tab-pane fade mx-auto" id="attachment_record"
+                                     role="tabpanel"
+                                     aria-labelledby="attachment_record-tab"
+                                     hx-get="{% url 'PR_attachment_record' Project.pk %}" hx-trigger="load">
+                                    <div class="mt-2">
+                                        <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            <div class="row table-responsive tab-pane fade mx-auto" id="all_score" role="tabpanel"
+                                 aria-labelledby="all_score-tab"
+                                 hx-get="{% url 'PR_all_score' Project.pk %}"
+                                 hx-trigger="load,revealed">
+                                <div class="mt-2">
+                                    <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <script>
+        // Jquery Datatable
+        $(document).ready(function () {
+            $("#table1").DataTable({
+                "searching": false,
+                "retrieve": true,
+                "language": {
+                    "processing": "處理中...",
+                    "loadingRecords": "載入中...",
+                    "lengthMenu": "顯示 _MENU_ 項結果",
+                    "zeroRecords": "沒有符合的結果",
+                    "info": "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+                    "infoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+                    "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+                    "infoPostFix": "",
+                    "search": "搜尋:",
+                    "paginate": {
+                        "first": "第一頁",
+                        "previous": "上一頁",
+                        "next": "下一頁",
+                        "last": "最後一頁"
+                    },
+                    "aria": {
+                        "sortAscending": ": 升冪排列",
+                        "sortDescending": ": 降冪排列"
+                    }
+                }
+            })
+        });
+    </script>
+{% endblock %}
+

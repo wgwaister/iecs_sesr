@@ -1,0 +1,18 @@
+{% load widget_tweaks %}
+
+{% with WIDGET_ERROR_CLASS='is-valid' %}
+    <form method="POST" action="{{ request.path }}" class="modal-content">
+        {% csrf_token %}
+
+        <div class="modal-header">
+            <h1>刪除</h1>
+        </div>
+        <div class="modal-body">
+            <p>確定刪除{{ Project.CompanyCode.CompanyName }}的{{ Project.ProjectName }}專案嗎</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+            <button type="submit" class="btn btn-primary">確定</button>
+        </div>
+    </form>
+{% endwith %}

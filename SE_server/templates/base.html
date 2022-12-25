@@ -1,0 +1,308 @@
+{% load widget_tweaks %}
+{% load static %}
+
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+    {% block head %}
+    {% endblock %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author"
+          content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.88.1">
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+{#    ----------------------------#}
+{#    <link href="/static/assets/images/logo/3Aico.ico" rel="shortcut icon"/>#}
+    <title>社交劇本演練平台</title>
+    <link rel="canonical"
+          href="https://getbootstrap.com/docs/5.1/examples/sidebars/">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500&family=Noto+Sans+TC:wght@300;400;500;900&display=swap"
+          rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="/static/assets/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/assets/vendors/iconly/bold.css">
+    <link rel="stylesheet"
+          href="/static/assets/vendors/perfect-scrollbar/perfect-scrollbar.css">
+    <link rel="stylesheet"
+          href="/static/assets/vendors/bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" href="/static/assets/css/app.css">
+    <!-- Custom styles for this template -->
+    <link href="/static/css/sidebars.css" rel="stylesheet">
+    <link href="/static/css/aaa.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/assets/vendors/jquery-datatables/jquery.dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="/static/assets/vendors/fontawesome/all.min.css">
+    <link rel="stylesheet" href="/static/assets/vendors/choices.js/choices.min.css"/>
+    <link href="/static/multiselect/css/multi-select.css" rel="stylesheet">
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        body {
+            background-color: #D0D0D0;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+
+        .ProjectCount, .CompanyName {
+            text-align: center;
+        }
+
+        .breadcrumb {
+            background-color: #D0D0D0;
+        }
+
+        .main-navbar {
+            background-color: #435ebe;
+        }
+
+        .alert {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 999;
+            text-align: center;
+        }
+
+        .layout-horizontal .header-top .logo img span {
+            height: 70px;
+        }
+
+        .container {
+            max-width: 95%;
+        }
+
+        .breadcrumb-item {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .layout-horizontal .header-top {
+            background-color: #fff;
+            padding: 0.1rem;
+        }
+
+        @media (min-width: 1072px) {
+            .d-com-block {
+                display: block !important;
+            }
+        }
+
+        .container-graph {
+            max-width: 60%;
+        }
+
+        button {
+            border-width: 0px;
+        }
+
+        {% block style %}
+        {% endblock %}
+    </style>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    {% block script %}
+    {% endblock %}
+    <script type='text/javascript'>
+        $(document).ready(
+            function () {
+                $('.alert').delay(6000).hide(0);
+            }
+        );
+    </script>
+</head>
+<body>
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+    <symbol id="bootstrap" viewBox="0 0 118 94">
+        <title>Bootstrap</title>
+        <path fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M24.509 0c-6.733 0-11.715 5.893-11.492 12.284.214 6.14-.064 14.092-2.066 20.577C8.943 39.365 5.547 43.485 0 44.014v5.972c5.547.529 8.943 4.649 10.951 11.153 2.002 6.485 2.28 14.437 2.066 20.577C12.794 88.106 17.776 94 24.51 94H93.5c6.733 0 11.714-5.893 11.491-12.284-.214-6.14.064-14.092 2.066-20.577 2.009-6.504 5.396-10.624 10.943-11.153v-5.972c-5.547-.529-8.934-4.649-10.943-11.153-2.002-6.484-2.28-14.437-2.066-20.577C105.214 5.894 100.233 0 93.5 0H24.508zM80 57.863C80 66.663 73.436 72 62.543 72H44a2 2 0 01-2-2V24a2 2 0 012-2h18.437c9.083 0 15.044 4.92 15.044 12.474 0 5.302-4.01 10.049-9.119 10.88v.277C75.317 46.394 80 51.21 80 57.863zM60.521 28.34H49.948v14.934h8.905c6.884 0 10.68-2.772 10.68-7.727 0-4.643-3.264-7.207-9.012-7.207zM49.948 49.2v16.458H60.91c7.167 0 10.964-2.876 10.964-8.281 0-5.406-3.903-8.178-11.425-8.178H49.948z">
+        </path>
+    </symbol>
+    <symbol id="book" viewBox="0 0 16 16">
+        <path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811V2.828zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492V2.687zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z"></path>
+    </symbol>
+    <symbol id="fileArrowUp" viewBox="0 0 16 16">
+        <path d="M8.5 11.5a.5.5 0 0 1-1 0V7.707L6.354 8.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 7.707V11.5z"></path>
+        <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"></path>
+    </symbol>
+    <symbol id="home" viewBox="0 0 16 16">
+        <path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z"></path>
+    </symbol>
+    <symbol id="people-circle" viewBox="0 0 16 16">
+        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path>
+        <path fill-rule="evenodd"
+              d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"></path>
+    </symbol>
+    <symbol id="come-back" viewBox="0 0 16 16">
+        <path fill-rule="evenodd"
+              d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"></path>
+    </symbol>
+    <symbol id="caret" viewBox="0 0 16 16">
+        <path fill-rule="evenodd"
+              d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"></path>
+    </symbol>
+
+</svg>
+<div id="app">
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags %}
+                {% if message.tags in "warning" %}
+                    <div class="alert alert-warning alert-dismissible show fade">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% elif message.tags in "error" %}
+                    <div class="alert alert-danger alert-dismissible show fade">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% elif message.tags in "success" %}
+                    <div class="alert alert-success alert-dismissible show fade">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    <div id="main" class="layout-horizontal">
+        <header class="mb-4">
+            <div class="header-top">
+                <div class="container-fluid">
+                    <div class="row justify-content-between align-items-center">
+                        <div class="logo btn col-12 col-sm-auto">
+                            <a href="{% url 'project' %}">
+                                <img src="/static/assets/images/logo/IECS.png" alt="Logo" srcset=""></a>
+                        </div>
+                        {% if request.user.is_authenticated %}
+                            <div class="col-auto d-none d-com-block">
+{#                                {% block search %}#}
+{#                                {% endblock %}#}
+                            </div>
+                            <div class="header-top-right col-12 col-sm-auto justify-content-around">
+                                {% if perms.socialapp.add_company %}
+                                    <div>
+                                        <a href="{% url 'project' %}" class='menu-link btn btn-outline-primary'>
+                                            <span>總表</span>
+                                        </a>
+                                    </div>
+                                    <div>
+                                        <a href="{% url 'company' %}" class='menu-link btn btn-outline-primary'>
+                                            <span>課程管理</span>
+                                        </a>
+                                    </div>
+                                {% endif %}
+                                <div class="dropdown">
+                                    <a href="#" class="user-dropdown btn d-flex dropend" data-bs-toggle="dropdown"
+                                       aria-expanded="false">
+                                        <div class="avatar avatar-md2">
+                                            <img src="/static/assets/images/faces/1.jpg" alt="Avatar">
+                                        </div>
+                                        <div class="text">
+                                            <h6 class="user-dropdown-name">{{ user.username }}</h6>
+                                            <p class="user-dropdown-status text-sm text-muted">{{ user.groups.all.0.Company.all.0.CompanyName }}</p>
+                                        </div>
+                                        <div>
+                                            <i class="bi bi-caret-down-fill"></i>
+                                        </div>
+
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow-lg"
+                                        aria-labelledby="dropdownMenuButton1">
+
+{#                                        <li>#}
+{#                                            <a class="dropdown-item"#}
+{#                                               href="{% url 'user_edit' pk=user.groups.all.0.Company.all.0.CompanyCode id=user.id url='self' %}">編輯使用者</a>#}
+{#                                        </li>#}
+
+                                        <li><a class="dropdown-item" hx-get="{% url 'logout' %}"
+                                               hx-target="#dialog">登出</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                {% comment %}
+                                <!-- Burger button responsive -->
+                                <a href="#" class="burger-btn d-block d-xl-none">
+                                    <i class="bi bi-justify fs-3"></i>
+                                </a>
+                                {% endcomment %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="content-wrapper container mx-auto">
+            <div class="page-heading mb-3">
+                <div class="row mx-auto">
+                    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb" style="width: auto">
+                        {% block breadcrumb %}
+
+                        {% endblock %}
+                    </nav>
+                </div>
+            </div>
+            {% block content %}
+                {% block project %}
+
+                {% endblock %}
+            {% endblock %}
+        </div>
+        <div id="modal" class="modal fade" tabindex="-1">
+            <div id="dialog" class="modal-dialog" hx-target="this">
+            </div>
+        </div>
+        <footer>
+
+        </footer>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+<script src="https://unpkg.com/htmx.org@1.7.0"></script>
+<script src="/static/assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<script src="/static/assets/js/bootstrap.bundle.min.js"></script>
+<script src="/static/assets/vendors/apexcharts/apexcharts.js"></script>
+<script src="/static/assets/js/pages/dashboard.js"></script>
+<script src="/static/assets/js/pages/horizontal-layout.js"></script>
+<script src="/static/assets/vendors/choices.js/choices.min.js"></script>
+<script src="/static/assets/js/pages/form-element-select.js"></script>
+<script src="/static/assets/js/mazer.js"></script>
+<script src="/static/assets/js/dialog.js"></script>
+<script src="/static/assets/vendors/jquery/jquery.min.js"></script>
+<script src="/static/assets/vendors/jquery-datatables/jquery.dataTables.min.js"></script>
+<script src="/static/assets/vendors/jquery-datatables/custom.jquery.dataTables.bootstrap5.min.js"></script>
+<script src="/static/assets/vendors/fontawesome/all.min.js"></script>
+<script src="/static/multiselect/js/jquery.multi-select.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% block script01 %}
+
+{% endblock %}
+</body>
+</html>

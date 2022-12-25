@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+{% load Template_Filter %}
+{% load guardian_tags %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="{% url 'project' %}">專案列表</a></li>
+        <li class="breadcrumb-item"><a href="/project/{{ Project.ProjectCode }}">
+            {{ Project.CompanyCode.CompanyName }}{{ Project.ProjectName }}</a></li>
+        <li class="breadcrumb-item active">寄送信件</li>
+    </ol>
+{% endblock %}
+
+
+{% block script %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var chEltMember = document.getElementById("checkMemberAll");//1.獲取checkbo的元素物件
+            chEltMember.checked = true;
+            var allCheckMember = document.getElementsByName("checkMember");//3.若checked=true,將所有的複選框選中,checked=false,將所有的複選框取消
+            for (var i = 0; i < allCheckMember.length; i++) {
+                if (!allCheckMember[i].checked) {
+                    chEltMember.checked = false
+                }
+            }
+        });
+
+        function checkOrCancelAllMember() {
+            var chEltMember = document.getElementById("checkMemberAll");//1.獲取checkbo的元素物件
+            var checkedElt = chEltMember.checked;//2.獲取選中狀態
+            var allCheckMember = document.getElementsByName("checkMember");//3.若checked=true,將所有的複選框選中,checked=false,將所有的複選框取消
+            //var allCheck = document.getElementsByName("file");//方法2
+            if (checkedElt)//全選
+            {
+                for (var i = 0; i < allCheckMember.length; i++) {
+                    //設定複選框的選中狀態
+                    allCheckMember[i].checked = true;
+                }
+            } else//取消全選
+            {
+                for (var i = 0; i < allCheckMember.length; i++) {
+                    allCheckMember[i].checked = false;
+                }
+            }
+        }
+
+        function SetAllMember() {
+            var chEltMember = document.getElementById("checkMemberAll");//1.獲取checkbo的元素物件
+            chEltMember.checked = true;
+            var allCheckMember = document.getElementsByName("checkMember");//3.若checked=true,將所有的複選框選中,checked=false,將所有的複選框取消
+            //var allCheck = document.getElementsByName("file");//方法2
+            for (var i = 0; i < allCheckMember.length; i++) {
+                if (!allCheckMember[i].checked) {
+                    chEltMember.checked = false
+                }
+            }
+        }
+    </script>
+{% endblock %}
+
+
+{% block content %}
+    <div class="page-content">
+        <section class="row mx-auto">
+            <h1 class="mb-4">寄送信件</h1>
+            <div class="row col-12 mx-auto justify-content-between">
+                {% block project %}
+                    {% include 'navbar.html' %}
+                {% endblock %}
+            </div>
+            <div class="row mx-auto">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>選擇收信者</h4>
+                        <p>請勾選收信人員</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="row col-12 mx-auto">
+                            <div class="row mx-auto table-responsive">
+                                <form method="POST" action="{{ request.path }}" novalidate>
+                                    {% csrf_token %}
+                                    <div class="row col-12 mx-auto">
+                                        <div class="mb-3">
+                                            <button type="submit"
+                                                    class="btn btn-primary align-self-end float-right col-auto">下一步
+                                            </button>
+                                            <p class="align-self-end float-right col-auto"></p>
+                                            <a href="{% url 'Mail_System' pk=Project.pk %}"
+                                               class="btn btn-primary align-self-end float-right col-auto">上一步</a>
+                                        </div>
+                                    </div>
+                                    <table class="table" id="table9"
+                                           style="text-align:center;overflow-x: auto;white-space: nowrap;">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col" class="no-sort"><input id="checkMemberAll" type="checkbox"
+                                                                                   onclick="checkOrCancelAllMember()"
+                                                                                   name="checkALLMember"/></th>
+                                            <th scope="col">編號</th>
+                                            <th scope="col">部門名稱</th>
+                                            <th scope="col">E-mail</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for TML in Project.TestML.all|dictsort:"MemberNumber" %}
+                                            <tr>
+                                                <td><input id="{{ TML.pk }}" type="checkbox" onclick="SetAllMember()"
+                                                           name="checkMember" value="{{ TML.pk }}"/></td>
+                                                <td>{{ TML.MemberNumber }}</td>
+                                                <td>{{ TML.UnitName }}</td>
+                                                <td>{{ TML.Email }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    <div class="row col-12 mx-auto">
+                                        <div class="mb-3">
+                                            <button type="submit"
+                                                    class="btn btn-primary align-self-end float-right col-auto">下一步
+                                            </button>
+                                            <p class="align-self-end float-right col-auto"></p>
+                                            <a href="{% url 'Mail_System' pk=Project.pk %}"
+                                               class="btn btn-primary align-self-end float-right col-auto">上一步</a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+{% endblock %}
+
+{% block script01 %}
+    {% comment %}
+    <script>
+        // Jquery Datatable
+        $(document).ready(function () {
+            var table = $("#table9").DataTable({
+                searching: false,
+                retrieve: true,
+                order: [1, 'asc'],
+                columnDefs: [{
+                    orderable: false,
+                    targets: 'no-sort',
+                }],
+                language: {
+                    processing: "處理中...",
+                    loadingRecords: "載入中...",
+                    lengthMenu: "顯示 _MENU_ 項結果",
+                    zeroRecords: "沒有符合的結果",
+                    info: "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+                    infoEmpty: "顯示第 0 至 0 項結果，共 0 項",
+                    infoFiltered: "(從 _MAX_ 項結果中過濾)",
+                    infoPostFix: "",
+                    search: "搜尋:",
+                    paginate: {
+                        first: "第一頁",
+                        previous: "上一頁",
+                        next: "下一頁",
+                        last: "最後一頁"
+                    },
+                    aria: {
+                        sortAscending: ": 升冪排列",
+                        sortDescending: ": 降冪排列"
+                    }
+                }
+            })
+            $('#checkMemberAll').on('click', function () {
+                // Get all rows with search applied
+                var rows = table.rows({'search': 'applied'}).nodes();
+                // Check/uncheck checkboxes for all rows in the table
+                $('input[type="checkbox"]', rows).prop('checked', this.checked);
+            });
+        });
+    </script>
+    {% endcomment %}
+{% endblock %}

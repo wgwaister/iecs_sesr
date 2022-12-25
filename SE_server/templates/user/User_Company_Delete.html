@@ -1,0 +1,23 @@
+{% load widget_tweaks %}
+
+{% with WIDGET_ERROR_CLASS='is-valid' %}
+    <form method="POST" action="{{ request.path }}" class="modal-content">
+        {% csrf_token %}
+        <div class="modal-header">
+            <h1>刪除</h1>
+        </div>
+        <div class="modal-body">
+            {% if Company.CompanyCode not in 'AA' %}
+                <p>確定刪除{{ Company.CompanyName }}嗎</p>
+            {% else %}
+                <p>無法刪除三甲科技</p>
+            {% endif %}
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+            {% if Company.CompanyCode not in 'AA' %}
+                <button type="submit" class="btn btn-primary">確定</button>
+            {% endif %}
+        </div>
+    </form>
+{% endwith %}

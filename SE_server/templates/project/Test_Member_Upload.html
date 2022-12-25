@@ -1,0 +1,26 @@
+{% load widget_tweaks %}
+
+{% with WIDGET_ERROR_CLASS='is-valid' %}
+    <form method="POST" action="{{ request.path }}" class="modal-content" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="modal-header">
+            <h1>上傳受測人員</h1>
+        </div>
+        <div class="modal-body">
+            <p>
+                請確認資料中包含以下欄位<br>
+                組別編號(Ex.G01),<br>
+                組別名稱(Ex.第一組),<br>
+                電子郵件<br>
+                <mark>如有中文請確認編碼為UTF-8</mark>
+            </p>
+            <p class="text-danger text-center">檔案類型請選擇csv</p>
+            {{ Form.upload }}
+        </div>
+        <div class="modal-footer">
+            <a href="{% url 'download' type='Member_Example' %}">下載範例</a>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+            <button type="submit" class="btn btn-primary">儲存</button>
+        </div>
+    </form>
+{% endwith %}

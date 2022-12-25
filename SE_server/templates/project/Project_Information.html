@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load Template_Filter %}
+{% load guardian_tags %}
+
+
+
+{% block breadcrumb %}
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="{% url 'project' %}">{{ Project.CompanyCode.CompanyName }}</a></li>
+        <li class="breadcrumb-item active">{{ Project.ProjectName }}</li>
+    </ol>
+{% endblock %}
+
+{% block content %}
+    <div class="page-content">
+        <section class="row mx-auto">
+            <h1 class="mb-4">演練資訊</h1>
+            <div class="row col-12 mx-auto justify-content-between">
+                {% block project %}
+                    {% include 'navbar.html' %}
+                {% endblock %}
+            </div>
+            <div class="row col-12 mx-auto">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row justify-content-between col-12 mx-auto">
+                            <div class="col-9">
+                                <h6 class="">演練階段:</h6>
+                                <p>{{ Project.ProjectName }}</p>
+                                <hr>
+                                <h6 class="">開始統計日期:</h6>
+                                <p>{{ Project.CalculateStartDate  |date:"Y/m/d H:i:s" }}</p>
+                                <hr>
+                                <h6 class="">結束統計日期:</h6>
+                                <p>{{ Project.CalculateEndDate  |date:"Y/m/d H:i:s" }}</p>
+                                <hr>
+                            </div>
+                            {% get_obj_perms request.user for Project as 'project_perms' %}
+                            {% if 'exe_project' in project_perms or 'change_project' in project_perms %}
+                                <div class="col-auto">
+                                    <button type="button" class="btn btn-primary align-self-end float-right col-auto"
+                                            hx-get="{% url 'edit_project' pk=Project.pk %}"
+                                            hx-target="#dialog">
+                                        編輯
+                                    </button>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+{#            {% if Project.MailCount != 0 %}#}
+{#                <div class="row col-12 mx-auto">#}
+{#                    <h1 class="mb-4">專案統計概況</h1>#}
+{#                    <section class="section col-auto">#}
+{#                        <div class="card">#}
+{#                            <div class="card-body" style="text-align: center;">#}
+{#                                <h3>信件標籤</h3>#}
+{#                                <h4>總開啟數/總點擊數</h4>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </section>#}
+{#                    {% for mail,result in Project.ProjectResult.items %}#}
+{#                        <section class="section col-auto">#}
+{#                            <div class="card">#}
+{#                                <div class="card-body" style="text-align: center;">#}
+{#                                    <h3>{{ result.name }}</h3>#}
+{#                                    <h4>{{ result.open }}/{{ result.click }}</h4>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </section>#}
+{#                    {% endfor %}#}
+{#                </div>#}
+{#            {% endif %}#}
+        </section>
+    </div>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% load widget_tweaks %}
+
+{% with WIDGET_ERROR_CLASS='is-valid' %}
+    <form method="POST" action="{{ request.path }}" class="modal-content" novalidate>
+        {% csrf_token %}
+
+        <div class="modal-header">
+            <h1>編輯專案</h1>
+        </div>
+        <div class="modal-body">
+            <div class="mb-3" style="display:none">
+                <label for="{{ form.CompanyCode.is_for_label }}" class="form-label">課程名稱</label>
+                <select name="CompanyCode" class="form-control" id="id_CompanyCode" readonly="readonly">
+                    <option value="{{ Project.CompanyCode.CompanyCode }}" readonly="readonly" selected>{{ Project.CompanyCode.CompanyName }}</option>
+                </select>
+                <div class="invalid-feedback">{{ form.CompanyCode.errors|first }}</div>
+            </div>
+            <div class="mb-3" style="display:none">
+                <label for="{{ form.ProjectCode.is_for_label }}" class="form-label">課程代碼</label>
+                {% render_field form.ProjectCode class="form-control" readonly="readonly" %}
+                <div class="invalid-feedback">{{ form.ProjectCode.errors|first }}</div>
+            </div>
+            <div class="mb-3" style="display:none">
+                <label for="{{ form.ProjectName.is_for_label }}" class="form-label">演練階段</label>
+                {% render_field form.ProjectName class="form-control" %}
+                <div class="invalid-feedback">{{ form.ProjectName.errors|first }}</div>
+            </div>
+            <div class="mb-3">
+                <label for="{{ form.CalculateStartDate.is_for_label }}"
+                       class="form-label">課程開始日期</label>
+                {% render_field form.CalculateStartDate class="form-control" %}
+                <div class="invalid-feedback">{{ form.CalculateStartDate.errors|first }}</div>
+            </div>
+            <div class="mb-3">
+                <label for="{{ form.CalculateEndDate.is_for_label }}" class="form-label">課程結束日期</label>
+                {% render_field form.CalculateEndDate class="form-control" %}
+                <div class="invalid-feedback">{{ form.CalculateEndDate.errors|first }}</div>
+            </div>
+            <div class="mb-3" style="display:none">
+                <label for="{{ form.IgnoreSecond.is_for_label }}" class="form-label">統計週期</label>
+                {% render_field form.IgnoreSecond class="form-control" %}
+                <div class="invalid-feedback">{{ form.IgnoreSecond.errors|first }}</div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+            <button type="submit" class="btn btn-primary">儲存</button>
+        </div>
+    </form>
+{% endwith %}

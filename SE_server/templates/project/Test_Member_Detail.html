@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% load guardian_tags %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="{% url 'project' %}">{{ Project.CompanyCode.CompanyName }}</a></li>
+        <li class="breadcrumb-item"><a href="/project/{{ Project.ProjectCode }}">
+            {{ Project.ProjectName }}</a></li>
+        <li class="breadcrumb-item active">受測名單</li>
+    </ol>
+{% endblock %}
+
+{% block script01 %}
+    <script>
+        // Jquery Datatable
+        let jquery_datatable = $("#table6").DataTable({
+            "retrieve": true,
+            "language": {
+                "processing": "處理中...",
+                "loadingRecords": "載入中...",
+                "lengthMenu": "顯示 _MENU_ 項結果",
+                "zeroRecords": "沒有符合的結果",
+                "info": "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+                "infoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+                "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+                "infoPostFix": "",
+                "search": "搜尋:",
+                "paginate": {
+                    "first": "第一頁",
+                    "previous": "上一頁",
+                    "next": "下一頁",
+                    "last": "最後一頁"
+                },
+                "aria": {
+                    "sortAscending": ": 升冪排列",
+                    "sortDescending": ": 降冪排列"
+                }
+            }
+        })
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="page-content">
+        <section class="row mx-auto">
+            <h1 class="mb-4">受測名單</h1>
+            <div class="row col-12 mx-auto justify-content-between">
+                {% block project %}
+                    {% include 'navbar.html' %}
+                {% endblock %}
+            </div>
+            <div class="row mx-auto">
+                <div class="card">
+                    <div class="card-body">
+                        {% get_obj_perms request.user for Project as 'project_perms' %}
+                        {% if 'exe_project' in project_perms %}
+                            <div class="row mx-auto">
+{#                                <div class="col-auto">#}
+{#                                    <button type="button" class="btn-sm btn-primary"#}
+{#                                            hx-get="{% url 'create_TML' pk=Project.pk %}"#}
+{#                                            hx-target="#dialog">新增單筆#}
+{#                                    </button>#}
+{#                                </div>#}
+{#                                <div class="col-auto">#}
+{#                                    <button type="button" class="btn-sm btn-primary"#}
+{#                                            hx-get="{% url 'upload_TML' pk=Project.pk %}"#}
+{#                                            hx-target="#dialog">上傳多筆#}
+{#                                    </button>#}
+{#                                </div>#}
+{#                                <div class="col-auto">#}
+{#                                    <button type="button" class="btn-sm btn-primary"#}
+{#                                            hx-get="{% url 'upload_TML_UID' pk=Project.pk %}"#}
+{#                                            hx-target="#dialog">上傳多筆(含UID)#}
+{#                                    </button>#}
+{#                                </div>#}
+                            </div>
+                        {% endif %}
+                        <br>
+                        {% if Have %}
+                            <div class="row mx-auto table-responsive">
+                                <table class="table table-striped" id="table6" style="text-align:center;overflow-x: auto;
+                                                                            white-space: nowrap;">
+                                    <thead>
+                                    <tr>
+                                        {% get_obj_perms request.user for Project as 'project_perms' %}
+                                        {% if 'exe_project' in project_perms %}
+                                            <th scope="col">編號</th>
+                                        {% endif %}
+                                        <th scope="col">組別名稱</th>
+                                        <th scope="col">Email</th>
+                                        {% get_obj_perms request.user for Project as 'project_perms' %}
+                                        {% if 'exe_project' in project_perms %}
+                                            <th scope="col">修改</th>
+                                        {% endif %}
+                                        {% get_obj_perms request.user for Project as 'project_perms' %}
+{#                                        {% if 'exe_project' in project_perms %}#}
+{#                                            <th scope="col">刪除</th>#}
+{#                                        {% endif %}#}
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for TML in Project.TestML.all|dictsort:"MemberNumber" %}
+                                        <tr>
+                                            {% get_obj_perms request.user for Project as 'project_perms' %}
+                                            {% if 'exe_project' in project_perms %}
+                                                <td>
+                                                    {{ TML.MemberNumber }}</td>
+                                            {% endif %}
+                                            <td>{{ TML.UnitName }}</td>
+                                            <td>{{ TML.Email }}</td>
+                                            {% get_obj_perms request.user for Project as 'project_perms' %}
+                                            {% if 'exe_project' in project_perms %}
+                                                <td>
+                                                    <button type="button" class="btn-sm btn-primary"
+                                                            hx-get="{% url 'edit_TML' pk=Project.pk id=TML.id %}"
+                                                            hx-target="#dialog">
+                                                        修改
+                                                    </button>
+                                                </td>
+                                            {% endif %}
+                                            {% get_obj_perms request.user for Project as 'project_perms' %}
+{#                                            {% if 'exe_project' in project_perms %}#}
+{#                                                <td>#}
+{#                                                    <button type="button"#}
+{#                                                            hx-get="{% url 'delete_TML' pk=Project.pk id=TML.id %}"#}
+{#                                                            hx-target="#dialog" class="btn-sm btn-danger">刪除#}
+{#                                                    </button>#}
+{#                                                </td>#}
+{#                                            {% endif %}#}
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="row mx-auto">
+                                <h3>此專案尚無受測清單</h3>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    {% if email_duplicate %}
+        <script>
+            alert('下列資料電子郵件或編號已存在，請手動修改\n編號,組別名稱,電子郵件\n{% for email in email_duplicate %}{{ email.MemberNumber }},{{ email.UnitName }},{{ email.Email }}\n{% endfor %}')
+        </script>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load Template_Filter %}
+{% load guardian_tags %}
+
+{% block content %}
+    <form method="POST" action="{{ request.path }}" class="modal-content" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="modal-header">
+            <h1>回覆可疑信件</h1>
+        </div>
+        <div class="modal-body">
+{#            <div class="mb-3">#}
+{#                <label class="form-label">請輸入組別編號</label>#}
+{#                <input type="text" class="form-control" name="group" required="required">#}
+{#            </div>#}
+            <div class="mb-3">
+                <label class="form-label">請輸入信件標題</label>
+                <input type="text" class="form-control" name="title" required="required">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">送出</button>
+        </div>
+    </form>
+
+{% endblock %}

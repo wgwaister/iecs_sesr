@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block file %}
+    <li class="sidebar-item  has-sub">
+        <a href="{% url 'file' %}" class='sidebar-link'>
+            <svg class="bi me-2" width="16" height="16">
+                <use xlink:href="#fileArrowUp"/>
+            </svg>
+            <span>檔案</span>
+        </a>
+        <ul class="submenu active">
+            <li class="submenu-item ">
+                <a href="#">檔案上傳</a>
+            </li>
+            <li class="submenu-item ">
+                <a href="#">確認上傳資料</a>
+            </li>
+            <li class="submenu-item ">
+                <a href="#">修改上傳資料</a>
+            </li>
+        </ul>
+    </li>
+
+{% endblock %}
+
+
+{% block content %}
+<h>File</h>
+<em>{{ current_time }}</em>
+{% endblock %}

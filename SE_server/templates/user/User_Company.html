@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% load Template_Filter %}
+
+
+
+{% block content %}
+    <div class="page-heading">
+    </div>
+    <div class="page-content">
+        <section class="row mx-auto">
+            <h3>課程列表</h3>
+{#            <div class="row mx-auto">#}
+{#                <div class="card">#}
+{#                    <div class="card-body">#}
+{#                        <h4>搜尋列</h4>#}
+{#                        <form action="" method="POST">#}
+{#                            {% csrf_token %}#}
+{#                            <div class="row align-items-start mx-auto">#}
+{#                                <p class="col-auto">公司代碼：{{ Form.CompanyCode }}</p>#}
+{#                                <input class="btn btn-outline-primary col-auto" type="submit" value="搜尋">#}
+{#                            </div>#}
+{#                        </form>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+            <div class="row mx-auto">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row mx-auto">
+                            <div class="col-1">
+                                <button type="button" class="btn btn-primary"
+                                        hx-get="{% url 'company_create' %}"
+                                        hx-target="#dialog">
+                                    新增
+                                </button>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row mx-auto">
+                            <table class="table table-striped" id="table1" style="text-align:center;overflow-x: auto;
+                                                                            white-space: nowrap;">
+                                <thead>
+                                <tr>
+                                    <th>編號</th>
+                                    <th>課程代碼</th>
+                                    <th>課程名稱</th>
+                                    <th>查看</th>
+                                    <th>刪除</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for company in Company %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ company.CompanyCode }}</td>
+                                        <td>{{ company.CompanyName }}</td>
+                                        <td>
+                                            <a type="button"
+                                               href="{% url 'user' pk=company.pk %}"
+                                               class="btn-sm btn-primary">查看
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <button type="button"
+                                                    hx-get="{% url 'company_delete' pk=company.pk %}"
+                                                    hx-target="#dialog" class="btn-sm btn-danger">刪除
+                                            </button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock %}

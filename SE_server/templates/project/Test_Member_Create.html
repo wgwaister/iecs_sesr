@@ -1,0 +1,38 @@
+{% load widget_tweaks %}
+
+{% with WIDGET_ERROR_CLASS='is-valid' %}
+    <form method="POST" action="{{ request.path }}" class="modal-content" novalidate>
+        {% csrf_token %}
+        <div class="modal-header">
+            <h1>新增受測人員</h1>
+        </div>
+        <div class="modal-body">
+            <div class="mb-3">
+                <label for="{{ form.ProjectCode.is_for_label }}" class="form-label">專案代碼</label>
+                <input type="text" name="ProjectCode" maxlength="50" class="form-control" id="id_ProjectCode"
+                        value="{{ Project.ProjectCode }}" readonly="readonly">
+                <div class="invalid-feedback">{{ form.ProjectCode.errors|first }}</div>
+            </div>
+            <div class="mb-3">
+                <label for="{{ form.UnitName.is_for_label }}" class="form-label">組別</label>
+                {% render_field form.UnitName class="form-control" placeholder="第一組" %}
+                <div class="invalid-feedback">{{ form.UnitName.errors|first }}</div>
+            </div>
+            <div class="mb-3">
+                <label for="{{ form.MemberNumber.is_for_label }}"
+                       class="form-label">組別編號</label>
+                {% render_field form.MemberNumber class="form-control" placeholder="G01" %}
+                <div class="invalid-feedback">{{ form.MemberNumber.errors|first }}</div>
+            </div>
+            <div class="mb-3">
+                <label for="{{ form.Email.is_for_label }}" class="form-label">E-Mail</label>
+                {% render_field form.Email class="form-control" placeholder="example@example.com" %}
+                <div class="invalid-feedback">{{ form.Email.errors|first }}</div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+            <button type="submit" class="btn btn-primary">儲存</button>
+        </div>
+    </form>
+{% endwith %}

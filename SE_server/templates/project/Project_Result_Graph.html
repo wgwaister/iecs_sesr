@@ -1,0 +1,249 @@
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.user-select-none').addClass('mx-auto');
+    });
+</script>
+
+<div class="row col-12 mx-auto" id="graph">
+{#    <h4>組別統計圖表</h4>#}
+{#    <div class="row text-center">#}
+{#        <div class="container-graph mx-auto">#}
+{#            <label>組別開啟率</label>#}
+{#            <canvas id="myChart" width="100" height="50"></canvas>#}
+{#            <label>組別點擊率</label>#}
+{#            <canvas id="myChart2" width="100" height="50"></canvas>#}
+{#        </div>#}
+{#    </div>#}
+
+    {% comment %}
+    <div class="row">
+        {% if open_bar %}
+            <div class="col offset-3">
+                {{ open_bar|safe }}
+            </div>
+        {% endif %}
+    </div>
+    <div class="row mx-auto">
+        <div class="col" id="people_open_bar">
+            {{ people_open_bar|safe }}
+        </div>
+    </div>
+    <div class="row">
+        {% if click_bar %}
+            <div class="col offset-3">
+                {{ click_bar|safe }}
+            </div>
+        {% endif %}
+    </div>
+    <div class="row mx-auto" id="people_click_bar">
+        <div class="col">
+            {{ people_click_bar|safe }}
+        </div>
+    </div>
+    {% endcomment %}
+</div>
+<div class="row mx-auto">
+    <h4>組別統計數據</h4>
+    <div class="row text-center mx-auto">
+        <h5>運算規則</h5>
+        <p>開啟率 = 開啟封數 ÷ 信件總數</p>
+        <p>點擊率 = 點擊封數 ÷ 信件總數</p>
+    </div>
+    <div class="row mx-auto">
+        <table class="table" id="table5" style="text-align:center;overflow-x: auto;
+                                                                            white-space: nowrap;">
+            <thead>
+            <tr>
+                <th>組別名稱</th>
+{#                <th>組別人數</th>#}
+                <th>信件總數量</th>
+                {% comment %}
+        <th>信件開啟數</th>
+        <th>信件開啟率<br>信件開啟數÷組別人數</th>
+        {% endcomment %}
+                <th>開啟封數</th>
+                <th>開啟率</th>
+                {% comment %}
+        <th>信件點擊數</th>
+        <th>信件點擊率<br>信件開啟數÷組別人數</th>
+        {% endcomment %}
+                <th>點擊封數</th>
+                <th>點擊率</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for Unit,a in Unit_People_Count.items %}
+                <tr>
+                    <td>{{ Unit }}</td>
+{#                    <td>{{ a.people_count }}</td>#}
+                    <td>{{ a.mail_count }}</td>
+                    {% comment %}
+            <td>{{ a.open_count }}</td>
+            <td>{{ a.open_rate | floatformat:"-1" }}%</td>
+            {% endcomment %}
+                    <td>{{ a.people_open_count }}</td>
+                    <td>{{ a.people_open_count_rate | floatformat:"-1" }}%</td>
+                    {% comment %}
+            <td>{{ a.click_count }}</td>
+            <td>{{ a.click_rate | floatformat:"-1" }}%</td>
+            {% endcomment %}
+                    <td>{{ a.people_click_count }}</td>
+                    <td>{{ a.people_click_count_rate | floatformat:"-1" }}%</td>
+
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<script>
+    // Jquery Datatable
+    $(document).ready(function () {
+        $("#table5").DataTable({
+            "searching": false,
+            "retrieve": true,
+            "language": {
+                "processing": "處理中...",
+                "loadingRecords": "載入中...",
+                "lengthMenu": "顯示 _MENU_ 項結果",
+                "zeroRecords": "沒有符合的結果",
+                "info": "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+                "infoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+                "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+                "infoPostFix": "",
+                "search": "搜尋:",
+                "paginate": {
+                    "first": "第一頁",
+                    "previous": "上一頁",
+                    "next": "下一頁",
+                    "last": "最後一頁"
+                },
+                "aria": {
+                    "sortAscending": ": 升冪排列",
+                    "sortDescending": ": 降冪排列"
+                }
+            }
+        });
+        setChart();
+        setChart2();
+    });
+
+    function setChart() {
+        var ctx = document.getElementById("myChart");
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                datasets: [{
+                    yAxisID: 'people_open_rate',
+                    label: '組別成員開啟率',
+                    data: {{ people_open_bar.open_count_rate }},
+                    backgroundColor: ['#FFA6FF'],
+                    borderColor: ['#FF00FF'],
+                    order: 2,
+                }, {
+                    yAxisID: 'mail_open_count',
+                    type: 'line',
+                    label: '信件開啟數',
+                    backgroundColor: ['#00EC00'],
+                    borderColor: ['#00DB00'],
+                    data: {{ people_open_bar.open_count }},
+                    order: 1,
+                }],
+                {% autoescape off %}
+                    labels: {{ people_open_bar.unit }}
+                {% endautoescape %}
+            },
+            options: {
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: '組別名稱',
+                        },
+                    },
+                    people_open_rate: {
+                        type: 'linear',
+                        position: 'left',
+                        ticks: {
+                            beginAtZero: true,
+                            color: ['#FFA6FF'],
+                            max: 100,
+                            min: 0,
+                            stepSize: 10,
+                        },
+                    },
+                    mail_open_count: {
+                        type: 'linear',
+                        position: 'right',
+                        ticks: {
+                            beginAtZero: true,
+                            color: ['#009100'],
+                            stepSize: 1,
+                        },
+                    }
+                },
+            }
+        });
+    }
+
+    function setChart2() {
+        var ctx = document.getElementById("myChart2");
+        var myChart2 = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                datasets: [{
+                    yAxisID: 'people_click_rate',
+                    label: '組別成員點擊率',
+                    data: {{ people_click_bar.click_count_rate }},
+                    backgroundColor: ['#FFA6FF'],
+                    borderColor: ['#FF00FF'],
+                    order: 2,
+                }, {
+                    yAxisID: 'mail_click_count',
+                    type: 'line',
+                    label: '信件點擊數',
+                    backgroundColor: ['#00EC00'],
+                    borderColor: ['#00DB00'],
+                    data: {{ people_click_bar.click_count }},
+                    order: 1,
+                }],
+                {% autoescape off %}
+                    labels: {{ people_click_bar.unit }}
+                {% endautoescape %}
+            },
+            options: {
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: '組別名稱',
+                        },
+                    },
+                    people_click_rate: {
+                        type: 'linear',
+                        position: 'left',
+                        ticks: {
+                            beginAtZero: true,
+                            color: ['#FFA6FF'],
+                            max: 100,
+                            min: 0,
+                            stepSize: 10,
+                        },
+                    },
+                    mail_click_count: {
+                        type: 'linear',
+                        position: 'right',
+                        ticks: {
+                            beginAtZero: true,
+                            color: ['#009100'],
+                            stepSize: 1,
+                        },
+                    }
+                },
+            }
+        });
+    }
+</script>
+

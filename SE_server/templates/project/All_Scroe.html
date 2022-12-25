@@ -1,0 +1,46 @@
+
+            <h4 class="mb-4">第二階段分數</h4>
+
+            <div class="row mx-auto">
+                <div class="card">
+                    <div class="card-body">
+
+                            <div class="row mx-auto table-responsive">
+                                <table class="table table-striped col-auto" id="table1" style="text-align:center;overflow-x: auto;
+                                                                            white-space: nowrap;">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">組別</th>
+                                        <th scope="col">信件一得分</th>
+                                        <th scope="col">信件二得分</th>
+                                        <th scope="col">信件三得分</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for score in all_group_score %}
+                                        <tr>
+                                            <td>{{ score.group_name }}</td>
+                                            {% if score.mail1 == None %}
+                                                <td>-</td>
+                                            {% else %}
+                                                <td>{{ score.mail1 }}</td>
+                                            {% endif %}
+                                            {% if score.mail2 == None %}
+                                                <td>-</td>
+                                            {% else %}
+                                                <td>{{ score.mail2 }}</td>
+                                            {% endif %}
+                                            {% if score.mail3 == None %}
+                                                <td>-</td>
+                                            {% else %}
+                                                <td>{{ score.mail3 }}</td>
+                                            {% endif %}
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                    </div>
+                </div>
+            </div>
